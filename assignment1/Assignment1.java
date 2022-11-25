@@ -44,7 +44,13 @@ class Convertor {
                         json += "}";
                     }
                     if(!attributes[0].startsWith("/")) {
-                        json += "\""+attributes[0]+"\": {";
+                        String[] atts = attributes[0].split(" ");
+                        if(atts.length == 1) {
+                            json += "\""+attributes[0]+"\": {";
+                        }else {
+                            String[] at = atts[1].split("=");
+                            json += "\""+atts[0]+"\": { \"@"+at[0]+"\": \""+at[1].split("'")[1]+"\"";
+                        }
                     }
                     previousTagLength = 1;
                     isSingle = true;
@@ -52,15 +58,15 @@ class Convertor {
                     if(previousTagName == attributes[0]) {
 
                     }else {
-                        // if(attributes[0].split(" ").length == 1) {
+                        if(attributes[0].split(" ").length == 1) {
                             json += "\""+attributes[0]+"\": \""+attributes[1]+"\"";
-                        // }else {
-                        //     String[] innerAttributes = attributes[0].split(" ");
+                        }else {
+                            String[] innerAttributes = attributes[0].split(" ");
 
-                        //     String[] innerAttribute = innerAttributes[1].split("=");
+                            String[] innerAttribute = innerAttributes[1].split("=");
 
-                        //     json += "\""+innerAttributes[0]+"\": { \""+innerAttribute[0]+"\": \""+innerAttribute[1].split("'")[1]+"\", \"content\": \""+attributes[1]+"\" }";
-                        // }
+                            json += "\""+innerAttributes[0]+"\": { \"@"+innerAttribute[0]+"\": \""+innerAttribute[1].split("'")[1]+"\", \"content\": \""+attributes[1]+"\" }";
+                        }
                     }
                     previousTagName = attributes[0];
                     isSingle = false;
@@ -73,7 +79,7 @@ class Convertor {
 
         System.out.println(json);
 
-        File jsonFile = new File("C:/Users/Alson/Desktop/College/EAD_Labs/assignment1/output/test.json");
+        File jsonFile = new File("D:/projects/college-related-projects/EAD_Labs/assignment1/output/test.json");
         FileWriter fileWriter = new FileWriter(jsonFile);
 
         fileWriter.write(json);
@@ -84,8 +90,7 @@ class Convertor {
 public class Assignment1 {
     public static void main(String[] args) throws IOException {
         Convertor convertor = new Convertor();
-
-        File xmlFile = new File("C:/Users/Alson/Desktop/College/EAD_Labs/assignment1/inputs/test.xml");
+        File xmlFile = new File("D:/projects/college-related-projects/EAD_Labs/assignment1/inputs/test.xml");
         convertor.xmlToJSON(xmlFile);
     }
 }
